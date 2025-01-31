@@ -13,7 +13,7 @@ module.exports = {
     extend: {
       colors: {
         // body: '#0e4e3f',
-        body:'#001F54',
+        body:'#064c41',
         // body:'#FFFFFF',
         // heading: '#212121',
         heading: '#FFF',
