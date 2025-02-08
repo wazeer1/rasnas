@@ -4,6 +4,7 @@ import { useWindowSize } from '@utils/use-window-size';
 import cn from 'classnames';
 import { LinkProps } from 'next/link';
 import { useSsrCompatible } from '@utils/use-ssr-compatible';
+import { useFetchBanner } from '@framework/banners/get-banners';
 
 interface BannerProps {
   banner: any;
@@ -13,6 +14,7 @@ interface BannerProps {
   classNameInner?: string;
   href: LinkProps['href'];
   disableBorderRadius?: boolean;
+  section: string;
 }
 
 function getImage(deviceWidth: number, imgObj: any) {
@@ -27,23 +29,29 @@ export default function BannerCard({
   classNameInner,
   href,
   disableBorderRadius = false,
+  section
 }: BannerProps) {
   const { width } = useSsrCompatible(useWindowSize(), { width: 0, height: 0 });
+  const { data, isLoading, isError, error } = useFetchBanner({ section: section });
+  console.log(data, isLoading, isError, error);
+  
   const { title, image } = banner;
   const selectedImage = getImage(width, image);
   return (
     <div className={cn('mx-auto', className)}>
       <Link
-        href={href}
+        href={`/products?${banner.filter}`}
         className={cn(
           'h-full group flex justify-center relative overflow-hidden',
           classNameInner
         )}
       >
         <Image
-          src={selectedImage.url}
-          width={selectedImage.width}
-          height={selectedImage.height}
+          src={banner.image}
+          width={width}
+          height={400}
+          // width={selectedImage.width}
+          // height={selectedImage.height}
           alt={title}
           quality={100}
           className={cn('bg-gray-300 object-cover w-full', {

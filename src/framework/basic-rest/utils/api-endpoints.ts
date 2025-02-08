@@ -35,5 +35,6 @@ export const API_ENDPOINTS = {
   CART_ITEMS: 'activities/view_cart_items/',
   GET_ADDRESSES: 'accounts/view_addresses/',
   ADD_ADDRESS: 'accounts/add_address/',
-  PURCHASE: 'activities/purchase_items/'
+  PURCHASE: 'activities/purchase_items/',
+  GET_BANNERS: 'marketing/view-banners/'
 };

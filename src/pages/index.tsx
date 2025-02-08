@@ -82,16 +82,17 @@ export default function Home() {
       <Container>
         <ProductsFlashSaleBlock date={"2024-12-01T01:02:03"} />
       </Container>
-      <BannerSliderBlock />
+      <BannerSliderBlock section={1} />
       <Container>
         {/* <CategoryBlock sectionHeading="text-shop-by-category" type="rounded" /> */}
         {/* <ProductsFeatured sectionHeading="text-featured-products" limit={5} /> */}
-        <BannerCard
+        {/* <BannerCard
           key={`banner--key${banner[1].id}`}
           banner={banner[1]}
+          section={2}
           href={`${ROUTES.COLLECTIONS}/${banner[1].slug}`}
           className="mb-12 lg:mb-14 xl:mb-16 pb-0.5 lg:pb-1 xl:pb-0"
-        />
+        /> */}
         {/* <BannerWithProducts
           sectionHeading="text-on-selling-products"
           categorySlug="/search"
