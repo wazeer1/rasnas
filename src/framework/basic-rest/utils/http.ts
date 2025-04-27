@@ -2,8 +2,8 @@ import axios from "axios";
 import { getToken } from "./get-token";
 
 const http = axios.create({
-  baseURL: 'http://localhost:8000/api/v1/',
-  // baseURL: 'https://api.rasnasboutique.com/api/v1/',
+  // baseURL: 'http://localhost:8000/api/v1/',
+  baseURL: 'https://api.rasnasboutique.com/api/v1/',
   timeout: 30000,
   headers: {
     Accept: "application/json",
