@@ -1,6 +1,7 @@
 import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
 import http from "@framework/utils/http";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export interface AddCart {
   product_id: string;
@@ -23,6 +24,20 @@ export interface AddCartResponse {
     quantity: number;
   }; // Adjust this based on your API response structure
 }
+export interface EditCartInputType {
+  cart_item_id: number; // This is `pk` in the API
+  attribute_id?: string;
+  quantity?: number;
+}
+
+export interface EditCartResponse {
+  app_data: {
+    StatusCode: number;
+    data: {
+      message: string;
+    };
+  };
+}
 
 async function addtocart(input: CheckoutInputType): Promise<AddCartResponse> {
   const response = await http.post<AddCartResponse>(
@@ -36,15 +51,61 @@ async function addtocart(input: CheckoutInputType): Promise<AddCartResponse> {
 }
 
 export const useAddCartMutation = () => {
+  const queryClient = useQueryClient(); // ✅ get query client
+
   return useMutation<AddCartResponse, unknown, CheckoutInputType>({
     mutationFn: addtocart,
     onSuccess: (data) => {
-      console.log("Add to Cart success response:", data);
-      // Additional success logic here, such as updating state or showing a toast
+      const response = data.app_data?.data;
+      if (data.app_data?.StatusCode === 6001) {
+        toast.error(response?.message || "Failed to add product");
+      } else {
+        toast.success("Product added successfully");
+
+        // ✅ Invalidate cart query to trigger re-fetch
+        queryClient.invalidateQueries({
+          queryKey: [API_ENDPOINTS.CART_ITEMS],
+        });
+      }
     },
     onError: (error) => {
       console.error("Add to Cart error response:", error);
-      // Additional error logic here, such as showing an error toast
+      toast.error("Something went wrong while adding to cart");
+    },
+  });
+};
+
+const editCartItem = async ({
+  cart_item_id,
+  ...input
+}: EditCartInputType): Promise<EditCartResponse> => {
+  const response = await http.put<EditCartResponse>(
+    `${API_ENDPOINTS.EDIT_CART_ITEM}${cart_item_id}/`,
+    input
+  );
+  return response.data;
+};
+
+export const useEditCartMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<EditCartResponse, unknown, EditCartInputType>({
+    mutationFn: editCartItem,
+    onSuccess: (data) => {
+      const { StatusCode, data: respData } = data.app_data;
+
+      if (StatusCode === 6000) {
+        toast.success(respData.message || "Cart item updated");
+        queryClient.invalidateQueries({
+          queryKey: [API_ENDPOINTS.CART_ITEMS],
+        });
+      } else {
+        toast.error(respData.message || "Update failed");
+      }
+    },
+    onError: (err) => {
+      console.error("Edit cart error:", err);
+      toast.error("Something went wrong");
     },
   });
 };

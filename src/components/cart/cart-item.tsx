@@ -1,34 +1,44 @@
-import Link from '@components/ui/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { fadeInOut } from '@utils/motion/fade-in-out';
-import { IoIosCloseCircle } from 'react-icons/io';
-import Counter from '@components/common/counter';
-import { useCart } from '@contexts/cart/cart.context';
-import usePrice from '@framework/product/use-price';
-import { ROUTES } from '@utils/routes';
-import { generateCartItemName } from '@utils/generate-cart-item-name';
-import { useTranslation } from 'next-i18next';
-import { useCartQuery } from '@framework/checkout/get-cartitems';
+import Link from "@components/ui/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { fadeInOut } from "@utils/motion/fade-in-out";
+import { IoIosCloseCircle } from "react-icons/io";
+import Counter from "@components/common/counter";
+import { useCart } from "@contexts/cart/cart.context";
+import usePrice from "@framework/product/use-price";
+import { ROUTES } from "@utils/routes";
+import { generateCartItemName } from "@utils/generate-cart-item-name";
+import { useTranslation } from "next-i18next";
+import { useCartQuery } from "@framework/checkout/get-cartitems";
+import {
+  useAddCartMutation,
+  useEditCartMutation,
+} from "@framework/checkout/use-add-cart";
 
 type CartItemProps = {
   item: any;
 };
 
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const { addItemToCart, removeItemFromCart, clearItemFromCart } = useCart();
-  console.log(item, '____log___item');
-  
+  const { mutate: editCart } = useEditCartMutation();
   const { price } = usePrice({
     amount: item.price,
-    currencyCode: 'USD',
+    currencyCode: "USD",
   });
   const { price: totalPrice } = usePrice({
     amount: item.itemTotal,
-    currencyCode: 'USD',
+    currencyCode: "USD",
   });
+  const addToCart = (data, quantity) => {
+    console.log(data, "ddata");
 
+    editCart({
+      cart_item_id: data.id, // item.id = CartItem ID (pk)
+      quantity: quantity,
+    });
+  };
   return (
     <motion.div
       layout
@@ -45,7 +55,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           width={112}
           height={112}
           loading="eager"
-          alt={item.name || 'Product Image'}
+          alt={item.name || "Product Image"}
           className="object-cover bg-gray-300"
         />
         <div
@@ -67,14 +77,27 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
         </Link>
         {/* @ts-ignore */}
         <span className="text-sm text-gray-400 mb-2.5">
-          {t('text-unit-price')} : &nbsp; {item.product_info.selling_price}
+          {t("text-unit-price")} : &nbsp; {item.product_info.selling_price}
         </span>
 
         <div className="flex items-end justify-between">
           <Counter
             quantity={item.quantity}
-            onIncrement={() => addItemToCart(item, 1)}
-            onDecrement={() => removeItemFromCart(item.id)}
+            onIncrement={() => {
+              const newQuantity = item.quantity + 1;
+              addItemToCart(item, 1);
+              addToCart(item, newQuantity);
+            }}
+            onDecrement={() => {
+              const newQuantity = item.quantity - 1;
+              if (newQuantity > 0) {
+                removeItemFromCart(item.id);
+                addToCart(item, newQuantity);
+              } else {
+                // If quantity becomes 0, remove the item completely
+                clearItemFromCart(item.id);
+              }
+            }}
             variant="dark"
           />
           <span className="text-sm font-semibold leading-5 md:text-base text-heading">

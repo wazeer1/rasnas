@@ -53,8 +53,6 @@ const ProductsBlock: React.FC<ProductsProps> = ({
   demoVariant,
   disableBorderRadius = false,
 }) => {
-  console.log(products,'___helllo_world____');
-  
   return (
     <div className={className}>
       {sectionHeading && (

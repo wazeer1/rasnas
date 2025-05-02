@@ -1,16 +1,16 @@
-import Input from '@components/ui/input';
-import PasswordInput from '@components/ui/password-input';
-import Button from '@components/ui/button';
-import { useForm } from 'react-hook-form';
-import { useLoginMutation, LoginInputType } from '@framework/auth/use-login';
-import { useUI } from '@contexts/ui.context';
-import Logo from '@components/ui/logo';
-import { ImGoogle2, ImFacebook2 } from 'react-icons/im';
+import Input from "@components/ui/input";
+import PasswordInput from "@components/ui/password-input";
+import Button from "@components/ui/button";
+import { useForm } from "react-hook-form";
+import { useLoginMutation, LoginInputType } from "@framework/auth/use-login";
+import { useUI } from "@contexts/ui.context";
+import Logo from "@components/ui/logo";
+import { ImGoogle2, ImFacebook2 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
-import { useTranslation } from 'next-i18next';
-import { loginWithGoogle } from '@utils/firebase';
-import { useState } from 'react';
-import { User } from 'firebase/auth';
+import { useTranslation } from "next-i18next";
+import { loginWithGoogle } from "@utils/firebase";
+import { useState } from "react";
+import { User } from "firebase/auth";
 
 const LoginForm: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -22,7 +22,6 @@ const LoginForm: React.FC = () => {
     const loggedInUser = await loginWithGoogle();
     if (loggedInUser) setUser(loggedInUser);
   };
-
 
   const {
     register,
@@ -36,21 +35,20 @@ const LoginForm: React.FC = () => {
       password,
       remember_me,
     });
-    console.log(email, password, remember_me, 'data');
   }
   function handelSocialLogin() {
     login({
-      email: 'demo@demo.com',
-      password: 'demo',
+      email: "demo@demo.com",
+      password: "demo",
       remember_me: true,
     });
   }
   function handleSignUp() {
-    setModalView('SIGN_UP_VIEW');
+    setModalView("SIGN_UP_VIEW");
     return openModal();
   }
   function handleForgetPassword() {
-    setModalView('FORGET_PASSWORD');
+    setModalView("FORGET_PASSWORD");
     return openModal();
   }
   return (
@@ -60,7 +58,7 @@ const LoginForm: React.FC = () => {
           <Logo />
         </div>
         <p className="mt-2 mb-8 text-sm md:text-base text-[#fff] sm:mb-10">
-          {t('common:login-helper')}
+          {t("common:login-helper")}
         </p>
       </div>
       <form
@@ -72,14 +70,14 @@ const LoginForm: React.FC = () => {
           <Input
             labelKey="forms:label-email"
             type="email"
-            className='text-[#fff]'
+            className="text-[#fff]"
             variant="solid"
-            {...register('email', {
-              required: `${t('forms:email-required')}`,
+            {...register("email", {
+              required: `${t("forms:email-required")}`,
               pattern: {
                 value:
                   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: t('forms:email-error'),
+                message: t("forms:email-error"),
               },
             })}
             errorKey={errors.email?.message}
@@ -87,8 +85,8 @@ const LoginForm: React.FC = () => {
           <PasswordInput
             labelKey="forms:label-password"
             errorKey={errors.password?.message}
-            {...register('password', {
-              required: `${t('forms:password-required')}`,
+            {...register("password", {
+              required: `${t("forms:password-required")}`,
             })}
           />
           <div className="flex items-center justify-center">
@@ -98,7 +96,7 @@ const LoginForm: React.FC = () => {
                   id="remember"
                   type="checkbox"
                   className="w-0 h-0 opacity-0"
-                  {...register('remember_me')}
+                  {...register("remember_me")}
                 />
                 <span className="absolute inset-0 transition-all duration-300 ease-in bg-gray-500 slider round"></span>
               </label>
@@ -106,7 +104,7 @@ const LoginForm: React.FC = () => {
                 htmlFor="remember"
                 className="flex-shrink-0 text-sm cursor-pointer text-heading ltr:pl-3 rtl:pr-3"
               >
-                {t('forms:label-remember-me')}
+                {t("forms:label-remember-me")}
               </label>
             </div>
             <div className="flex ltr:ml-auto rtl:mr-auto">
@@ -115,7 +113,7 @@ const LoginForm: React.FC = () => {
                 onClick={handleForgetPassword}
                 className="text-sm underline ltr:text-right rtl:text-left text-heading ltr:pl-3 rtl:pr-3 hover:no-underline focus:outline-none"
               >
-                {t('common:text-forgot-password')}
+                {t("common:text-forgot-password")}
               </button>
             </div>
           </div>
@@ -126,7 +124,7 @@ const LoginForm: React.FC = () => {
               disabled={isPending}
               className="h-11 md:h-12 w-full mt-1.5 text-body"
             >
-              {t('common:text-login')}
+              {t("common:text-login")}
             </Button>
           </div>
         </div>
@@ -134,7 +132,7 @@ const LoginForm: React.FC = () => {
       <div className="flex flex-col items-center justify-center relative text-sm text-heading mt-6 mb-3.5">
         <hr className="w-full border-gray-300" />
         <span className="absolute -top-2.5 px-2 bg-body">
-          {t('common:text-or')}
+          {t("common:text-or")}
         </span>
       </div>
       <Button
@@ -145,16 +143,16 @@ const LoginForm: React.FC = () => {
         onClick={handleLogin}
       >
         <FcGoogle className="text-sm sm:text-base ltr:mr-1.5 rtl:ml-1.5" />
-        {t('common:text-login-with-google')}
+        {t("common:text-login-with-google")}
       </Button>
       <div className="mt-5 mb-1 text-sm text-center sm:text-base text-white">
-        {t('common:text-no-account')}{' '}
+        {t("common:text-no-account")}{" "}
         <button
           type="button"
           className="text-sm font-bold underline sm:text-base text-heading hover:no-underline focus:outline-none"
           onClick={handleSignUp}
         >
-          {t('common:text-register')}
+          {t("common:text-register")}
         </button>
       </div>
     </div>

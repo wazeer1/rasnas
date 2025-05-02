@@ -1,11 +1,11 @@
-import ProductsBlock from '@containers/products-block';
-import { useNewArrivalProductsQuery } from '@framework/product/get-all-new-arrival-products';
+import ProductsBlock from "@containers/products-block";
+import { useNewArrivalProductsQuery } from "@framework/product/get-all-new-arrival-products";
 
 interface Props {
   hideProductDescription?: boolean;
   showCategory?: boolean;
   showRating?: boolean;
-  demoVariant?: 'ancient';
+  demoVariant?: "ancient";
   disableBorderRadius?: boolean;
   className?: string;
 }
@@ -16,15 +16,12 @@ export default function NewArrivalsProductFeed({
   showRating = false,
   demoVariant,
   disableBorderRadius = false,
-  className = 'mb-9 md:mb-10 xl:mb-12',
+  className = "mb-9 md:mb-10 xl:mb-12",
 }: Props) {
   const { data, isLoading, error } = useNewArrivalProductsQuery({
     limit: 10,
     demoVariant,
   });
-
-  console.log(data, '_____rtrt');
-  
 
   return (
     <ProductsBlock

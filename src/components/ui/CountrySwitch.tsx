@@ -5,14 +5,19 @@ interface SwitchProps {
   onSwitch: (value: string) => void;
 }
 
-type LocationStatus = "Kuwait" | "India" | "Outside Kuwait and India" | "Permission Denied";
+type LocationStatus =
+  | "Kuwait"
+  | "India"
+  | "Outside Kuwait and India"
+  | "Permission Denied";
 
 const CountrySwitch: React.FC<SwitchProps> = ({ onSwitch }) => {
-  const country = useCounterStore((state) => state.country);
   const changeCountry = useCounterStore((state) => state.changeCountry);
   const [locationStatus, setLocationStatus] = useState<LocationStatus | null>(
     null
   );
+  const country = useCounterStore((state) => state.country);
+  // const country =locationStatus == "India" ? "IN" : locationStatus == "Kuwait" ? "KWT":""
 
   const isInKuwait = (latitude: number, longitude: number) =>
     latitude >= 28.5246 &&
@@ -25,6 +30,7 @@ const CountrySwitch: React.FC<SwitchProps> = ({ onSwitch }) => {
     latitude <= 37.6 &&
     longitude >= 68.7 &&
     longitude <= 97.25;
+  console.log(locationStatus, "isinkuwaut");
 
   useEffect(() => {
     const checkLocation = () => {
@@ -59,6 +65,7 @@ const CountrySwitch: React.FC<SwitchProps> = ({ onSwitch }) => {
     changeCountry();
     onSwitch(country === "IN" ? "Kuwait" : "India");
   };
+  console.log(country, "country");
 
   return (
     <div className="flex flex-col items-center space-y-4">

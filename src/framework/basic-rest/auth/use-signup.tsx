@@ -6,7 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 import { log } from "console";
 // const { setModalView, openModal, closeModal } = useUI();
 
-
 export interface SignUpInputType {
   email: string;
   password: string;
@@ -14,16 +13,14 @@ export interface SignUpInputType {
 }
 async function signUp(input: SignUpInputType) {
   try {
-    console.log('inside register mutation');
-    
     const response = await http.post(API_ENDPOINTS.REGISTER, {
       first_name: input.name,
       email: input.email,
       password: input.password,
     });
     // Ensure that token is correctly retrieved based on the API response structure
-    if (response.data.app_data.StatusCode === 6000){
-      return {email:  input.email}
+    if (response.data.app_data.StatusCode === 6000) {
+      return { email: input.email };
       // setModalView("SIGNUP_OTP")
       // return {
       //   access_token: response.data.app_data?.data?.access_token || null,
@@ -37,14 +34,13 @@ async function signUp(input: SignUpInputType) {
   }
 }
 
-
 export const useSignUpMutation = () => {
-  const { authorize, closeModal,setModalView } = useUI();
+  const { authorize, closeModal, setModalView } = useUI();
   return useMutation({
     mutationFn: (input: SignUpInputType) => signUp(input),
-    onSuccess: (data:any) => {
+    onSuccess: (data: any) => {
       // return true
-      setModalView("SIGNUP_OTP")
+      setModalView("SIGNUP_OTP");
       Cookies.set("email", data.email);
       // authorize();
       // closeModal();
