@@ -1,68 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { useFetchAddress } from "@framework/product/get-addresses";
+import React, { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useUI } from "@contexts/ui.context";
 
-// Define the AddressList props to include the onAddressSelect callback
 interface AddressListProps {
-  onAddressSelect: (address: AddressInputType) => void; // Callback to return selected address
+  onAddressSelect: (address: AddressInputType) => void;
+  onDelete?: (id: string) => void;
+  addresses: AddressInputType[];
+  isLoading: boolean;
 }
 
 const AddressList: React.FC<AddressListProps> = ({
   onAddressSelect,
-  refresh,
+  onDelete,
+  addresses,
+  isLoading,
 }) => {
-  const {
-    data: addresses,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useFetchAddress();
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
-  // const [refresh, setRefresh] = useState();
 
-  // Handle loading state
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  if (isLoading) return <p>Loading...</p>;
 
-  // Handle error state
-  if (isError) {
+  if (!addresses || addresses.length === 0) {
     return (
-      <div>
-        <p>Error fetching addresses: {error?.message}</p>
-        <button onClick={refetch}>Retry</button>
-      </div>
-    );
-  }
-
-  // If no addresses are available, show a message
-  if (!addresses?.addresses || addresses.addresses.length === 0) {
-    return (
-      <p className="text-heading pb-6">
-        No addresses found. Please add an address!
+      <p className="text-red-600 font-semibold pb-6">
+        No address found. Please add an address!
       </p>
     );
   }
-
-  // Render the list of addresses
+  console.log(selectedAddress, "selectedaddres");
+  const { setSelectedAddressId } = useUI();
   return (
     <div className="pb-8">
-      <h2>Your Addresses</h2>
-      <div className="flex space-x-2 w-full overflow-x-scroll no_scrollbar">
-        {addresses.addresses.map((addr) => (
-          <div
-            key={addr.id}
-            className={`border rounded-md space-x-3 text-heading p-2 flex items-start ${
-              selectedAddress === addr.id
-                ? "border-blue-500"
-                : "border-gray-400"
-            }`}
-          >
-            <div>
-              <p className="mb-0">
-                <strong>
-                  {addr.first_name} {addr.last_name}
-                </strong>
+      <h2 className="text-lg font-semibold mb-2">Your Addresses</h2>
+      <div className="flex gap-4 overflow-x-auto whitespace-nowrap py-2 no_scrollbar">
+        {addresses.map((addr) => {
+          const isSelected = selectedAddress === addr.id;
+          return (
+            <div
+              key={addr.id}
+              className={`relative cursor-pointer border rounded-md text-heading p-4 min-w-[300px] flex flex-col justify-between ${
+                isSelected
+                  ? "border-blue-500 text-blue-600"
+                  : "border-gray-300 text-gray-800"
+              }`}
+              onClick={() => {
+                setSelectedAddress(addr.id);
+                setSelectedAddressId(addr.id);
+                onAddressSelect(addr);
+              }}
+            >
+              {/* Remove button */}
+              {onDelete && (
+                <IconButton
+                  aria-label="delete"
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent triggering address select
+                    onDelete(addr.id);
+                  }}
+                  className="!absolute top-2 right-2"
+                >
+                  <DeleteIcon fontSize="small" className="text-red-200" />
+                </IconButton>
+              )}
+
+              <p
+                className={`mb-0 font-semibold
+                ${isSelected && " text-blue-300"}
+                `}
+              >
+                {addr.first_name} {addr.last_name}
               </p>
               <p className="mb-0">
                 {addr.address}, {addr.city}
@@ -70,25 +77,8 @@ const AddressList: React.FC<AddressListProps> = ({
               <p className="mb-0">{addr.post_code}</p>
               <p className="mb-0">{addr.phone}</p>
             </div>
-
-            <div
-              className="mt-2 cursor-pointer flex items-center"
-              onClick={() => {
-                setSelectedAddress(addr.id);
-                onAddressSelect(addr); // Return the selected address to the parent
-              }}
-            >
-              <div
-                className={`w-[10px] h-[10px] border-2 rounded-full ${
-                  selectedAddress === addr.id ? "bg-blue-500" : "bg-gray-400"
-                }`}
-              />
-              <span className="ml-2">
-                {selectedAddress === addr.id ? "Selected" : "Select"}
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

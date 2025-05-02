@@ -38,8 +38,7 @@ export default function ProductPopup() {
   const variations = getVariations(data.variations);
   const { slug, images, name, description, selling_price, attribute } = data;
   const { mutate, isLoading, isError, error, isSuccess } = useAddCartMutation();
-  const { country, countryDetails} = userStore();
-  console.log(images, "__________");
+  const { country, countryDetails } = userStore();
 
   const isSelected = !isEmpty(variations)
     ? !isEmpty(attributes) &&
@@ -51,15 +50,14 @@ export default function ProductPopup() {
     return Math.floor(Math.random() * limit);
   }
   function addToCart() {
-    console.log('====================================');
-    console.log(data, selectedAttribute, quantity);
-    console.log('====================================');
-    if (!selectedAttribute){
-      toast.error("Attribute is required")
-    }else{
-      console.log(data,selectedAttribute, quantity, 'popopopopopopopopop');
-      
-      mutate({product_id: data.id, attribute_id: selectedAttribute.id,quantity:quantity})
+    if (!selectedAttribute) {
+      toast.error("Please select the size");
+    } else {
+      mutate({
+        product_id: data.id,
+        attribute_id: selectedAttribute.id,
+        quantity: quantity,
+      });
     }
     // const item:string = generateCartItem(data, selectedAttribute, quantity);
     // if (!isSelected) return;
@@ -85,7 +83,7 @@ export default function ProductPopup() {
     //   ...prev,
     //   ...attribute,
     // }));
-    setSelectedAttribute(attribute)
+    setSelectedAttribute(attribute);
   }
 
   function navigateToCartPage() {
@@ -131,7 +129,7 @@ export default function ProductPopup() {
 
             <div className="flex items-center mt-3">
               <div className="text-heading font-semibold text-base md:text-xl lg:text-2xl">
-              {countryDetails.currencySymbol} {selling_price}
+                {countryDetails.currencySymbol} {selling_price}
               </div>
               {discount && (
                 <del className="font-segoe text-gray-400 text-base lg:text-xl ltr:pl-2.5 rtl:pr-2.5 -mt-0.5 md:mt-0">

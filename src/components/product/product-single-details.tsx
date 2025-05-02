@@ -49,9 +49,7 @@ const ProductSingleDetails: React.FC = () => {
   );
   const variations = getVariations(data?.variations);
 
-  console.log(data, "______fellow_data");
   const product_detail = data?.app_data?.data;
-  console.log(product_detail, "___detail____");
 
   const isSelected = !isEmpty(variations)
     ? !isEmpty(attributes) &&
@@ -59,20 +57,22 @@ const ProductSingleDetails: React.FC = () => {
         attributes.hasOwnProperty(variation)
       )
     : true;
-    const { openModal, setModalView, setModalData } = useUI();
-    const { mutate, isError, error, isSuccess } = useAddCartMutation();
+  const { openModal, setModalView, setModalData } = useUI();
+  const { mutate, isError, error, isSuccess } = useAddCartMutation();
   function addToCart() {
+    console.log(!selectedAttribute, "selected attribute");
     if (!selectedAttribute) return;
     const token = getToken();
-    console.log(token, '____tok');
-    
-    if(!token){
-      console.log('___no tok');
-      
+
+    if (!token) {
       setModalView("LOGIN_VIEW");
       return openModal();
     }
-    mutate({product_id: product_detail.id, attribute_id: selectedAttribute.id,quantity:quantity})
+    mutate({
+      product_id: product_detail.id,
+      attribute_id: product_detail?.attribute[0].id || selectedAttribute.id,
+      quantity: quantity,
+    });
     // setAddToCartLoader(true);
     // setTimeout(() => {
     //   setAddToCartLoader(false);
@@ -93,8 +93,9 @@ const ProductSingleDetails: React.FC = () => {
   }
 
   function handleAttribute(attribute: any) {
-    setSelectedAttribute(attribute)
+    setSelectedAttribute(attribute);
   }
+  console.log(product_detail, "attribute");
 
   return (
     <div className="block lg:grid grid-cols-9 gap-x-10 xl:gap-x-14 pt-7 pb-10 lg:pb-14 2xl:pb-20 items-start">
@@ -123,21 +124,23 @@ const ProductSingleDetails: React.FC = () => {
         </Carousel>
       ) : (
         <div className="col-span-5 grid grid-cols-2 gap-2.5">
-          {product_detail?.images?.map((item: { image: string; id: number }, index: number) => (
-            <div
-              key={index}
-              className="col-span-1 transition duration-150 ease-in hover:opacity-90"
-            >
-              <img
-                src={
-                  item.image ??
-                  "/assets/placeholder/products/product-gallery.svg"
-                }
-                alt={`${product_detail?.name}--${index}`}
-                className="object-cover w-full"
-              />
-            </div>
-          ))}
+          {product_detail?.images?.map(
+            (item: { image: string; id: number }, index: number) => (
+              <div
+                key={index}
+                className="col-span-1 transition duration-150 ease-in hover:opacity-90"
+              >
+                <img
+                  src={
+                    item.image ??
+                    "/assets/placeholder/products/product-gallery.svg"
+                  }
+                  alt={`${product_detail?.name}--${index}`}
+                  className="object-cover w-full"
+                />
+              </div>
+            )
+          )}
         </div>
       )}
 
@@ -166,7 +169,10 @@ const ProductSingleDetails: React.FC = () => {
             key={`popup-attribute-key${"variation"}`}
             title={"Size"}
             attributes={product_detail?.attribute}
-            active={selectedAttribute}
+            active={
+              (!selectedAttribute && product_detail?.attribute[0]) ||
+              selectedAttribute
+            }
             onClick={handleAttribute}
           />
         </div>

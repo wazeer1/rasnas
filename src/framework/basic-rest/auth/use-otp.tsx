@@ -6,7 +6,6 @@
 // import { log } from "console";
 // // const { setModalView, openModal, closeModal } = useUI();
 
-
 // export interface OtpInputType {
 //   otp: string
 // }
@@ -32,7 +31,6 @@
 //   }
 // }
 
-
 // export const useVerifyMutation = () => {
 //   const { authorize, closeModal,setModalView } = useUI();
 //   return useMutation({
@@ -49,8 +47,6 @@
 //     },
 //   });
 // };
-
-
 
 import { useMutation } from "@tanstack/react-query";
 import http from "@framework/utils/http";
@@ -70,15 +66,20 @@ async function verifyOtp(input: OtpInputType) {
     });
 
     if (response.data.app_data.StatusCode === 6000) {
-        console.log("______hello");
-        
       return response.data.app_data;
     } else {
-      throw new Error(response.data.app_data?.errors || "OTP verification failed");
+      throw new Error(
+        response.data.app_data?.errors || "OTP verification failed"
+      );
     }
   } catch (error: any) {
-    console.error("OTP verification failed:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.app_data?.errors || "OTP verification failed");
+    console.error(
+      "OTP verification failed:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.app_data?.errors || "OTP verification failed"
+    );
   }
 }
 

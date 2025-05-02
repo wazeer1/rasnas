@@ -1,13 +1,11 @@
-import { Item } from '@contexts/cart/cart.utils';
-import { generateCartItemName } from '@utils/generate-cart-item-name';
-import usePrice from '@framework/product/use-price';
+import { Item } from "@contexts/cart/cart.utils";
+import { generateCartItemName } from "@utils/generate-cart-item-name";
+import usePrice from "@framework/product/use-price";
 
 export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
-  console.log(item, '_____item_____');
-  
   const { price } = usePrice({
     amount: item.itemTotal,
-    currencyCode: 'USD',
+    currencyCode: "USD",
   });
   return (
     <div className="flex py-4 items-center lg:px-3 border-b border-gray-300">
