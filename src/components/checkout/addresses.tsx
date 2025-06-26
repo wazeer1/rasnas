@@ -2,22 +2,46 @@ import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useUI } from "@contexts/ui.context";
+import { useDeleteAddress } from "@framework/product/get-addresses";
+import Swal from "sweetalert2";
 
 interface AddressListProps {
   onAddressSelect: (address: AddressInputType) => void;
-  onDelete?: (id: string) => void;
   addresses: AddressInputType[];
   isLoading: boolean;
 }
 
 const AddressList: React.FC<AddressListProps> = ({
   onAddressSelect,
-  onDelete,
   addresses,
   isLoading,
 }) => {
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
-
+  const { mutate: deleteAddress, isPending } = useDeleteAddress();
+  const handleDeleteClick = (id: string) => {
+    Swal.fire({
+      title: "Delete Address?",
+      text: "Are you sure you want to remove this address?",
+      icon: "warning",
+      background: "#043d3b",
+      color: "#ffffff",
+      iconColor: "#facc15",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#4ade80",
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+      customClass: {
+        popup: "rounded-xl",
+        confirmButton: "text-white",
+        cancelButton: "text-white",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteAddress(id);
+      }
+    });
+  };
   if (isLoading) return <p>Loading...</p>;
 
   if (!addresses || addresses.length === 0) {
@@ -27,7 +51,6 @@ const AddressList: React.FC<AddressListProps> = ({
       </p>
     );
   }
-  console.log(selectedAddress, "selectedaddres");
   const { setSelectedAddressId } = useUI();
   return (
     <div className="pb-8">
@@ -50,19 +73,17 @@ const AddressList: React.FC<AddressListProps> = ({
               }}
             >
               {/* Remove button */}
-              {onDelete && (
-                <IconButton
-                  aria-label="delete"
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation(); // prevent triggering address select
-                    onDelete(addr.id);
-                  }}
-                  className="!absolute top-2 right-2"
-                >
-                  <DeleteIcon fontSize="small" className="text-red-200" />
-                </IconButton>
-              )}
+              <IconButton
+                aria-label="delete"
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteClick(addr.id);
+                }}
+                className="!absolute top-2 right-2"
+              >
+                <DeleteIcon fontSize="small" className="text-red-200" />
+              </IconButton>
 
               <p
                 className={`mb-0 font-semibold

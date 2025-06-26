@@ -1,29 +1,31 @@
 // import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
 // import http from "@framework/utils/http";
+import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
+import http from "@framework/utils/http";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export interface UpdateUserType {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   displayName: string;
-  phoneNumber: string;
-  email: string;
+  phone_number: string;
+  mail: string;
   password: string;
   confirmPassword: string;
   gender: string;
 }
 async function updateUser(input: UpdateUserType) {
-  // return http.post(API_ENDPOINTS.ChangeEmail, input);
-  return input;
+  return http.post(API_ENDPOINTS.UPDATE_ACCOUNT_DETAILS, input);
 }
 export const useUpdateUserMutation = () => {
   return useMutation({
     mutationFn: (input: UpdateUserType) => updateUser(input),
-    onSuccess: (data) => {
-      console.log(data, "UpdateUser success response");
+    onSuccess: () => {
+      toast.success("Account updated successfully");
     },
-    onError: (data) => {
-      console.log(data, "UpdateUser error response");
+    onError: () => {
+      toast.error("Something went wrong");
     },
   });
 };

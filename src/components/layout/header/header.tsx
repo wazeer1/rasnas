@@ -21,9 +21,9 @@ type DivElementRef = React.MutableRefObject<HTMLDivElement>;
 const { site_header } = siteSettings;
 const Header: React.FC = () => {
   const { openSearch, openModal, setModalView, isAuthorized } = useUI();
-  const {data} = useFetchCategory({});
-  console.log(data, '____head_category');
-  const token = getToken()
+  const { data } = useFetchCategory({});
+  console.log(data, "____head_category");
+  const token = getToken();
   const { t } = useTranslation("common");
   const siteHeaderRef = useRef() as DivElementRef;
   addActiveScroll(siteHeaderRef);
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
           />
           <div className="flex-shrink-0 ltr:ml-auto rtl:mr-auto ltr:lg:mr-5 rtl:lg:ml-5 ltr:xl:mr-8 rtl:xl:ml-8 ltr:2xl:mr-10 rtl:2xl:ml-10">
             {/* <LanguageSwitcher /> */}
-            <CountrySwitch onSwitch={handleCountrySwitch} />
+            {/* <CountrySwitch onSwitch={handleCountrySwitch} /> */}
           </div>
           <div className="items-center justify-end flex-shrink-0 hidden lg:flex gap-x-6 lg:gap-x-5 xl:gap-x-8 2xl:gap-x-10 ltr:ml-auto rtl:mr-auto">
             <button

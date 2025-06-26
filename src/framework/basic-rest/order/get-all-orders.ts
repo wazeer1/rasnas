@@ -4,14 +4,12 @@ import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
 import { useQuery } from "@tanstack/react-query";
 
 export const fetchOrders = async () => {
-  const {
-    data: { data },
-  } = await http.get(API_ENDPOINTS.ORDERS);
-  return { orders: { data: data.data as Order[] } };
+  const { data } = await http.get(API_ENDPOINTS.ORDERS);
+  return data;
 };
-export const useOrdersQuery = (options: QueryOptionsType) => {
+export const useGetAllOrders = (options: QueryOptionsType) => {
   return useQuery<{ orders: { data: Order[] } }, Error>({
     queryKey: [API_ENDPOINTS.ORDERS, options],
-    queryFn: fetchOrders
+    queryFn: fetchOrders,
   });
 };

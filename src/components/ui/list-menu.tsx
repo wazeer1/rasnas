@@ -1,9 +1,9 @@
-import { useTranslation } from 'next-i18next';
-import Image from 'next/image';
-import { IoIosArrowForward } from 'react-icons/io';
-import Link from './link';
-import MegaMenu from './mega-menu';
-import cn from 'classnames';
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import { IoIosArrowForward } from "react-icons/io";
+import Link from "./link";
+import MegaMenu from "./mega-menu";
+import cn from "classnames";
 
 const ListMenu = ({
   dept,
@@ -14,12 +14,12 @@ const ListMenu = ({
   hasBanners,
   menuIndex,
 }: any) => {
-  const { t } = useTranslation('menu');
+  const { t } = useTranslation("menu");
   return (
-    <li className={cn(!hasMegaMenu ? 'group relative' : '')}>
+    <li className={cn(!hasMegaMenu ? "group relative" : "")}>
       <Link
         href={`products?category=${data.name}`}
-        className="flex items-center py-2 ltr:pl-5 rtl:pr-5 ltr:xl:pl-7 rtl:xl:pr-7 ltr:pr-3 rtl:pl-3 ltr:xl:pr-3.5 rtl:xl:pl-3.5 hover:text-heading hover:bg-gray-700"
+        className="flex items-center py-2 ltr:pl-5 rtl:pr-5 ltr:xl:pl-7 rtl:xl:pr-7 ltr:pr-3 rtl:pl-3 ltr:xl:pr-3.5 rtl:xl:pl-3.5 hover:text-heading hover:bg-gray-700 capitalize"
       >
         {data.icon && (
           <span className="inline-flex ltr:mr-2 rtl:ml-2">{data.icon}</span>
