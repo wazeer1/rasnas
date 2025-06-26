@@ -1,23 +1,26 @@
 // import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
 // import http from "@framework/utils/http";
+import { API_ENDPOINTS } from "@framework/utils/api-endpoints";
+import http from "@framework/utils/http";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export interface ChangePasswordInputType {
-  newPassword: string;
-  oldPassword: string;
+  new_password: string;
+  old_password: string;
 }
 async function changePassword(input: ChangePasswordInputType) {
-  // return http.post(API_ENDPOINTS.ChangePassword, input);
-  return input;
+  return http.post(API_ENDPOINTS.CHANGE_PASSWORD, input);
 }
 export const useChangePasswordMutation = () => {
   return useMutation({
     mutationFn: (input: ChangePasswordInputType) => changePassword(input),
-    onSuccess: (data) => {
-      console.log(data, "ChangePassword success response");
+    onSuccess: () => {
+      toast.success("Password changed successfully");
     },
     onError: (data) => {
-      console.log(data, "ChangePassword error response");
+      const errorMessage = data?.response.data.app_data.data.message;
+      toast.error(errorMessage);
     },
   });
 };

@@ -1,4 +1,4 @@
-import { QueryKey } from '@tanstack/react-query';
+import { QueryKey } from "@tanstack/react-query";
 
 export type CollectionsQueryOptionsType = {
   text?: string;
@@ -12,7 +12,7 @@ export type CategoriesQueryOptionsType = {
   category?: string;
   status?: string;
   limit?: number;
-  demoVariant?: 'ancient';
+  demoVariant?: "ancient";
 };
 export type ProductsQueryOptionsType = {
   type: string;
@@ -26,7 +26,7 @@ export type QueryOptionsType = {
   category?: string;
   status?: string;
   limit?: number;
-  demoVariant?: 'ancient';
+  demoVariant?: "ancient";
   country: string;
 };
 
@@ -102,6 +102,7 @@ export type OrderItem = {
   name: string;
   price: number;
   quantity: number;
+  total_amount: number;
 };
 export type Order = {
   id: string | number;

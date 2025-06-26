@@ -1,6 +1,6 @@
-import React from 'react';
-import Link from '@components/ui/link';
-import { useTranslation } from 'next-i18next';
+import React from "react";
+import Link from "@components/ui/link";
+import { useTranslation } from "next-i18next";
 
 interface MenuItem {
   id: number | string;
@@ -16,13 +16,13 @@ type MegaMenuProps = {
 };
 
 const MegaMenu: React.FC<MegaMenuProps> = ({ columns }) => {
-  const { t } = useTranslation('menu');
+  const { t } = useTranslation("menu");
   return (
-    <div className="absolute bg-gray-200 megaMenu shadow-header ltr:-left-28 rtl:-right-28 ltr:xl:left-0 rtl:xl:right-0">
+    <div className="absolute bg-gray-200 megaMenu shadow-header ltr:-left-28 rtl:-right-28 ltr:xl:left-0 rtl:xl:right-0 ">
       <div className="grid grid-cols-5">
         {columns?.map((column) => (
           <ul
-            className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7"
+            className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7 capitalize"
             key={column.id}
           >
             {column?.columnItems?.map((columnItem) => (
@@ -30,7 +30,7 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ columns }) => {
                 <li className="mb-1.5">
                   <Link
                     href={columnItem.path}
-                    className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                    className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300 capitalize"
                   >
                     {t(columnItem.label)}
                   </Link>
@@ -40,13 +40,13 @@ const MegaMenu: React.FC<MegaMenuProps> = ({ columns }) => {
                     key={item.id}
                     className={
                       columnItem?.columnItemItems?.length === item.id
-                        ? 'border-b border-gray-300 pb-3.5 mb-3'
-                        : ''
+                        ? "border-b border-gray-300 pb-3.5 mb-3 capitalize"
+                        : ""
                     }
                   >
                     <Link
                       href={item.path}
-                      className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                      className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300 capitalize"
                     >
                       {t(item.label)}
                     </Link>

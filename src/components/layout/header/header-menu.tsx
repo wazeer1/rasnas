@@ -13,8 +13,7 @@ interface MenuProps {
 
 const HeaderMenu: React.FC<MenuProps> = ({ data, categoryData, className }) => {
   const { t } = useTranslation("menu");
-  console.log(categoryData, "caaat data");
-
+  
   return (
     <nav className={classNames(`headerMenu flex w-full relative`, className)}>
       {categoryData?.map((item: any) => (
@@ -26,12 +25,11 @@ const HeaderMenu: React.FC<MenuProps> = ({ data, categoryData, className }) => {
         >
           <Link
             href={`products?category=${item.name}`}
-            className="relative inline-flex items-center px-3 py-2 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-gray-500"
+            className="relative inline-flex items-center px-3 py-2 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-gray-500 capitalize"
           >
             {item.name}
             {/* {t(item.label)} */}
-            {(
-              ( item.subcategories.length > 0)) && (
+            {item.subcategories.length > 0 && (
               <span className="opacity-30 text-xs mt-1 xl:mt-0.5 w-4 flex justify-end">
                 <FaChevronDown className="transition duration-300 ease-in-out transform group-hover:-rotate-180" />
               </span>
