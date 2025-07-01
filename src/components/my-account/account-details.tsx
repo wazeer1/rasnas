@@ -11,10 +11,11 @@ import { RadioBox } from "@components/ui/radiobox";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { useGetUserQuery } from "@framework/customer/use-get-customer";
+import { useMutation } from "react-query";
 
 const AccountDetails: React.FC = () => {
   const { mutate: updateUser, isPending } = useUpdateUserMutation();
-  const { data } = useGetUserQuery();
+  const { data, refetch } = useGetUserQuery();
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -27,11 +28,14 @@ const AccountDetails: React.FC = () => {
   } = useForm<UpdateUserType>({
     defaultValues: userData,
   });
-
-  function onSubmit(input: UpdateUserType) {
-    updateUser(input);
-    setIsEditing(false);
-  }
+  const onSubmit = async (input: UpdateUserType) => {
+    updateUser(input, {
+      onSuccess: () => {
+        refetch();
+        setIsEditing(false);
+      },
+    });
+  };
 
   function handleEditClick() {
     reset(userData);
@@ -91,11 +95,11 @@ const AccountDetails: React.FC = () => {
             </div>
             <Input
               labelKey="forms:label-display-name"
-              {...register("displayName", {
+              {...register("display_name", {
                 required: "forms:display-name-required",
               })}
               variant="solid"
-              errorKey={errors.displayName?.message}
+              errorKey={errors.display_name?.message}
             />
             <div className="flex flex-col sm:flex-row sm:gap-x-3 space-y-4 sm:space-y-0">
               <Input
@@ -111,12 +115,12 @@ const AccountDetails: React.FC = () => {
               <Input
                 type="email"
                 labelKey="forms:label-email-star"
-                {...register("mail", {
+                {...register("email", {
                   required: "forms:email-required",
                 })}
                 variant="solid"
                 className="w-full sm:w-1/2"
-                errorKey={errors.mail?.message}
+                errorKey={errors.email?.message}
               />
             </div>
             <div className="relative flex flex-col">
@@ -152,22 +156,26 @@ const AccountDetails: React.FC = () => {
             <div className="p-5 border-b md:border-b-0 md:border-r border-gray-100">
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm text-black mb-1">
+                  <h3 className="text-sm text-heading mb-1">
                     {t("forms:label-first-name")}
                   </h3>
-                  <p className="font-bold text-black">{userData.first_name}</p>
+                  <p className="font-bold text-heading">
+                    {userData.first_name}
+                  </p>
                 </div>
                 <div>
-                  <h3 className="text-sm text-black mb-1">
+                  <h3 className="text-sm text-heading mb-1">
                     {t("forms:label-display-name")}
                   </h3>
-                  <p className="font-bold text-black">{userData.displayName}</p>
+                  <p className="font-bold text-heading">
+                    {userData.display_name}
+                  </p>
                 </div>
                 <div>
-                  <h3 className="text-sm text-black mb-1">
+                  <h3 className="text-sm text-heading mb-1">
                     {t("forms:label-email-star")}
                   </h3>
-                  <p className="font-bold text-black">{userData.email}</p>
+                  <p className="font-bold text-heading">{userData.email}</p>
                 </div>
               </div>
             </div>
@@ -175,24 +183,24 @@ const AccountDetails: React.FC = () => {
             <div className="p-5">
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm text-black mb-1">
+                  <h3 className="text-sm text-heading mb-1">
                     {t("forms:label-last-name")}
                   </h3>
-                  <p className="font-bold text-black">{userData.last_name}</p>
+                  <p className="font-bold text-heading">{userData.last_name}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm text-black mb-1">
+                  <h3 className="text-sm text-heading mb-1">
                     {t("forms:label-phone")}
                   </h3>
-                  <p className="font-bold text-black">
+                  <p className="font-bold text-heading">
                     {userData.phone_number}
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm text-black mb-1">
+                  <h3 className="text-sm text-heading mb-1">
                     {t("common:text-gender")}
                   </h3>
-                  <p className="font-bold text-black capitalize">
+                  <p className="font-bold text-heading capitalize">
                     {userData.gender}
                   </p>
                 </div>
