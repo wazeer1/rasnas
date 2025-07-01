@@ -57,29 +57,32 @@ const ProductSingleDetails: React.FC = () => {
         attributes.hasOwnProperty(variation)
       )
     : true;
-  const { openModal, setModalView, setModalData } = useUI();
+  const { openModal, setModalView, isAuthorized } = useUI();
   const { mutate, isError, error, isSuccess } = useAddCartMutation();
-  function addToCart() {
-    console.log(!selectedAttribute, "selected attribute");
-    if (!selectedAttribute) return;
-    const token = getToken();
 
-    if (!token) {
+  function handleLogin() {
+    setModalView("LOGIN_VIEW");
+    return openModal();
+  }
+
+  function addToCart() {
+    if (!isAuthorized || !getToken()) {
+      // Open login modal if user is not authorized or token is missing
       setModalView("LOGIN_VIEW");
       return openModal();
     }
+    if (!selectedAttribute) return;
+
+    // Proceed with adding to cart
     mutate({
       product_id: product_detail.id,
-      attribute_id: product_detail?.attribute[0].id || selectedAttribute.id,
-      quantity: quantity,
+      attribute_id: selectedAttribute.id || product_detail?.attribute?.[0]?.id,
+      quantity,
     });
-    // setAddToCartLoader(true);
-    // setTimeout(() => {
-    //   setAddToCartLoader(false);
-    // }, 600);
 
     const item = generateCartItem(data!, attributes);
     addItemToCart(item, quantity);
+
     toast("Added to the bag", {
       progressClassName: "fancy-progress-bar",
       position: width > 768 ? "bottom-right" : "top-right",
@@ -89,13 +92,11 @@ const ProductSingleDetails: React.FC = () => {
       pauseOnHover: true,
       draggable: true,
     });
-    console.log(item, "item");
   }
 
   function handleAttribute(attribute: any) {
     setSelectedAttribute(attribute);
   }
-  console.log(product_detail, "attribute");
 
   return (
     <div className="block lg:grid grid-cols-9 gap-x-10 xl:gap-x-14 pt-7 pb-10 lg:pb-14 2xl:pb-20 items-start">

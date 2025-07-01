@@ -21,6 +21,9 @@ export default function ProductPopup() {
     modalData: { data },
     closeModal,
     openCart,
+    openModal,
+    setModalView,
+    isAuthorized,
   } = useUI();
   const router = useRouter();
   const { addItemToCart } = useCart();
@@ -30,6 +33,7 @@ export default function ProductPopup() {
   const [addToCartLoader, setAddToCartLoader] = useState<boolean>(false);
   const [selectedAttribute, setSelectedAttribute] = useState<any>();
   const [imageNumb, setImageNumb] = useState<number>(0);
+
   const { price, basePrice, discount } = usePrice({
     amount: data.sale_price ? data.sale_price : data.price,
     baseAmount: data.price,
@@ -50,6 +54,11 @@ export default function ProductPopup() {
     return Math.floor(Math.random() * limit);
   }
   function addToCart() {
+    if (!isAuthorized) {
+      // Open login modal if user is not authorized or token is missing
+      setModalView("LOGIN_VIEW");
+      return openModal();
+    }
     if (!selectedAttribute) {
       toast.error("Please select the size");
     } else {

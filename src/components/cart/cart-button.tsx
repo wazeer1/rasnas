@@ -3,10 +3,14 @@ import { useCart } from "@contexts/cart/cart.context";
 import { useUI } from "@contexts/ui.context";
 
 export default function CartButton() {
-  const { openCart } = useUI();
+  const { openCart, isAuthorized, openModal, setModalView } = useUI();
   const { totalItems } = useCart();
+  function handleLogin() {
+    setModalView("LOGIN_VIEW");
+    return openModal();
+  }
   function handleCartOpen() {
-    return openCart();
+    return !isAuthorized ? handleLogin() : openCart();
   }
   return (
     <button
