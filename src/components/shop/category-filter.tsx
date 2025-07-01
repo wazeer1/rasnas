@@ -11,7 +11,6 @@ export const CategoryFilter = () => {
   const { data, isLoading } = useCategoriesQuery({
     limit: 10,
   });
-  console.log(data, "_______data________");
 
   const selectedCategories = query?.category
     ? (query.category as string).split(",")
@@ -52,7 +51,7 @@ export const CategoryFilter = () => {
 
   return (
     <div className="block border-b border-gray-300 pb-7 mb-7">
-      <h3 className="text-heading text-sm md:text-base font-semibold mb-7">
+      <h3 className="text-black text-sm md:text-base font-semibold mb-7">
         {t("text-category")}
       </h3>
       <div className="mt-2 flex flex-col space-y-4">

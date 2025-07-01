@@ -25,18 +25,18 @@ const FilterSidebar = () => {
             <IoArrowBack className="text-black" />
           )}
         </button>
-        <h2 className="font-bold text-xl md:text-2xl m-0 text-heading w-full text-center ltr:pr-6 rtl:pl-6">
+        <h2 className="font-bold text-xl md:text-2xl m-0 text-black w-full text-center ltr:pr-6 rtl:pl-6">
           {t("text-filters")}
         </h2>
       </div>
 
       <Scrollbar className="menu-scrollbar flex-grow mb-auto">
-        <div className="flex flex-col py-7 px-5 md:px-7 text-heading">
+        <div className="flex flex-col py-7 px-5 md:px-7 text-black">
           <ShopFilters />
         </div>
       </Scrollbar>
 
-      <div className="text-sm md:text-base leading-4 flex items-center justify-center px-7 flex-shrink-0 h-14 bg-heading text-white">
+      <div className="text-sm md:text-base leading-4 flex items-center justify-center px-7 flex-shrink-0 h-14 bg-heading text-black">
         9,608 {t("text-items")}
       </div>
     </div>

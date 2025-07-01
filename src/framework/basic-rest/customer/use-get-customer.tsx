@@ -7,7 +7,7 @@ export interface UserType {
   id: string;
   first_name: string;
   last_name: string;
-  displayName: string;
+  display_name: string;
   phone_number: string;
   mail: string;
   gender: "male" | "female";
@@ -22,5 +22,6 @@ export const useGetUserQuery = () => {
   return useQuery<UserType>({
     queryKey: [API_ENDPOINTS.GET_ACCOUNT_DETAILS],
     queryFn: fetchUser,
+    staleTime: 0,
   });
 };

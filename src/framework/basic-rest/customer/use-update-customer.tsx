@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 export interface UpdateUserType {
   first_name: string;
   last_name: string;
-  displayName: string;
+  display_name: string;
   phone_number: string;
-  mail: string;
+  email: string;
   password: string;
   confirmPassword: string;
   gender: string;
